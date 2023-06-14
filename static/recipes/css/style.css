@@ -251,3 +251,16 @@ h6 {
 .main-footer a:hover{
     filter: brightness(0.8);
 }
+
+.center h1{
+  text-align: center;
+}
+
+.m-x {
+  margin: 0 var(--spacing-gutter-medium);
+}
+
+.m-y {
+  margin: var(--spacing-gutter-medium) 0;
+}
+
