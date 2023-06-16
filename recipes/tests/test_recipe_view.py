@@ -27,3 +27,8 @@ class RecipeViewTest(TestCase):
         """check crrect template"""
         response = self.client.get(reverse('recipes:home'))
         self.assertTemplateUsed(response, 'recipes/pages/home.html')
+
+    def test_show_recipe(self):
+        """check if is any recipe"""
+        response = self.client.get(reverse('recipes:home'))
+        self.assertIn('Não foram encontradas receitas :(', response.content.decode('utf-8'))
