@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
-from django.template import context
 from utils.recipes.factory import make_recipe
 from recipes.models import *
 
