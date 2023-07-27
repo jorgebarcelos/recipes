@@ -2,22 +2,20 @@ from django.urls import reverse, resolve
 from recipes.models import *
 from recipes import views
 from .test_recipe_base import RecipeTestBase
+
 # Create your tests here.
 
 
 class RecipeViewTest(RecipeTestBase):
-
     def tearDown(self) -> None:
         return super().tearDown()
 
     def test_home_view(self):
         view = resolve(reverse('recipes:home'))
         self.assertIs(view.func, views.home)
-    
+
     def test_category_view(self):
-        view = resolve(
-            reverse('recipes:category', kwargs={'category_id': 1})
-        )
+        view = resolve(reverse('recipes:category', kwargs={'category_id': 1}))
         self.assertIs(view.func, views.category)
 
     def test_recipe_detail_view(self):
@@ -48,7 +46,6 @@ class RecipeViewTest(RecipeTestBase):
 
         self.assertIn('Recipe-Test', content)
         self.assertEqual(len(response_context_recipes), 1)
-
 
     def test_category_status(self):
         """test category page is 404 if not recipes found"""
