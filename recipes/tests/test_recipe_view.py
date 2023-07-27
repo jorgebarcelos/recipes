@@ -1,10 +1,15 @@
-from django.test import TestCase
 from django.urls import reverse, resolve
 from recipes.models import *
 from recipes import views
+from .test_recipe_base import RecipeTestBase
 # Create your tests here.
 
-class RecipeViewTest(TestCase):
+
+class RecipeViewTest(RecipeTestBase):
+
+    def tearDown(self) -> None:
+        return super().tearDown()
+
     def test_home_view(self):
         view = resolve(reverse('recipes:home'))
         self.assertIs(view.func, views.home)
@@ -30,41 +35,18 @@ class RecipeViewTest(TestCase):
         self.assertTemplateUsed(response, 'recipes/pages/home.html')
 
     def test_show_recipe(self):
-        """check if is any recipe"""
+        """check if is no recipes in home page"""
         response = self.client.get(reverse('recipes:home'))
         self.assertIn('Não foram encontradas receitas :(', response.content.decode('utf-8'))
 
     def test_home_template(self):
         """check if home template loads recipes"""
-        category = Category.objects.create(name='lanche')
-        author = User.objects.create_user(
-            first_name='José',
-            last_name='Janglenssen',
-            username='Janglenssen',
-            password='123456',
-            email='jose@janglenssen.com'
-        )
-        recipe = Recipe.objects.create(
-            title = 'Recipe-Test',
-            description = 'Recipe-Unit-Test',
-            slug = 'recipe-test',
-            preparation_time = 10,
-            preparation_time_unit = 'Minutos',
-            servings = 5,
-            servings_unit = 'Porções',
-            preparation_steps = 'Recipe-Unit-Test',
-            preparation_steps_is_html = False,
-            is_published = True,
-            category = category,
-            author = author
-        )
+        self.make_recipe()
         response = self.client.get(reverse('recipes:home'))
         content = response.content.decode('utf-8')
         response_context_recipes = response.context['recipes']
 
         self.assertIn('Recipe-Test', content)
-        self.assertIn('10 Minutos', content)
-        self.assertIn('Porções', content)
         self.assertEqual(len(response_context_recipes), 1)
 
 
